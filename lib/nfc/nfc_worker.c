@@ -688,8 +688,8 @@ void nfc_worker_write_mf_classic(NfcWorker* nfc_worker) {
             FURI_LOG_I(TAG, "Check low level nfc data");
             if(memcmp(&nfc_data, &nfc_worker->dev_data->nfc_data, sizeof(FuriHalNfcDevData))) {
                 FURI_LOG_E(TAG, "Wrong card");
-                nfc_worker->callback(NfcWorkerEventWrongCard, nfc_worker->context);
-                break;
+                // nfc_worker->callback(NfcWorkerEventWrongCard, nfc_worker->context);
+                // break;
             }
 
             FURI_LOG_I(TAG, "Check mf classic type");
@@ -719,8 +719,8 @@ void nfc_worker_write_mf_classic(NfcWorker* nfc_worker) {
                 if(nfc_worker->state != NfcWorkerStateMfClassicWrite) break;
                 if(!mf_classic_write_sector(&tx_rx, &dest_data, src_data, i)) {
                     FURI_LOG_E(TAG, "Failed to write %d sector", i);
-                    write_success = false;
-                    break;
+                    // write_success = false;
+                    // break;
                 }
             }
             if(nfc_worker->state != NfcWorkerStateMfClassicWrite) break;

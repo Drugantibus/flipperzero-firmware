@@ -18,7 +18,7 @@ void nfc_scene_mf_classic_wrong_card_on_enter(void* context) {
 
     widget_add_icon_element(widget, 73, 17, &I_DolphinCommon_56x48);
     widget_add_string_element(
-        widget, 3, 4, AlignLeft, AlignTop, FontPrimary, "This is wrong card");
+        widget, 3, 4, AlignLeft, AlignTop, FontPrimary, "This is the wrong card");
     widget_add_string_multiline_element(
         widget,
         4,

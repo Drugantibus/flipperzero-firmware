@@ -18,16 +18,19 @@ bool nfc_mf_classic_write_worker_callback(NfcWorkerEvent event, void* context) {
 static void nfc_scene_mf_classic_write_setup_view(Nfc* nfc) {
     Popup* popup = nfc->popup;
     popup_reset(popup);
-    uint32_t state = scene_manager_get_scene_state(nfc->scene_manager, NfcSceneMfClassicWrite);
 
-    if(state == NfcSceneMfClassicWriteStateCardSearch) {
-        popup_set_text(
-            nfc->popup, "Apply the initial\ncard only", 128, 32, AlignRight, AlignCenter);
-        popup_set_icon(nfc->popup, 0, 8, &I_NFC_manual_60x50);
-    } else {
-        popup_set_header(popup, "Writing\nDon't move...", 52, 32, AlignLeft, AlignCenter);
-        popup_set_icon(popup, 12, 23, &A_Loading_24);
-    }
+    // uint32_t state = scene_manager_get_scene_state(nfc->scene_manager, NfcSceneMfClassicWrite);
+    // if(state == NfcSceneMfClassicWriteStateCardSearch) {
+    //     popup_set_text(
+    //         nfc->popup, "Apply the initial\ncard only", 128, 32, AlignRight, AlignCenter);
+    //     popup_set_icon(nfc->popup, 0, 8, &I_NFC_manual_60x50);
+    // } else {
+    //     popup_set_header(popup, "Writing\nDon't move...", 52, 32, AlignLeft, AlignCenter);
+    //     popup_set_icon(popup, 12, 23, &A_Loading_24);
+    // }
+
+    popup_set_header(popup, "Writing\nDon't move...", 52, 32, AlignLeft, AlignCenter);
+    popup_set_icon(popup, 12, 23, &A_Loading_24);
 
     view_dispatcher_switch_to_view(nfc->view_dispatcher, NfcViewPopup);
 }
@@ -61,8 +64,13 @@ bool nfc_scene_mf_classic_write_on_event(void* context, SceneManagerEvent event)
         } else if(event.event == NfcWorkerEventFail) {
             scene_manager_next_scene(nfc->scene_manager, NfcSceneMfClassicWriteFail);
             consumed = true;
+        // } else if(event.event == NfcWorkerEventWrongCard) {
+        //     scene_manager_next_scene(nfc->scene_manager, NfcSceneMfClassicWrongCard);
+        //     consumed = true;
         } else if(event.event == NfcWorkerEventWrongCard) {
-            scene_manager_next_scene(nfc->scene_manager, NfcSceneMfClassicWrongCard);
+            scene_manager_set_scene_state(
+                nfc->scene_manager, NfcSceneMfClassicWrite, NfcSceneMfClassicWriteStateCardFound);
+            nfc_scene_mf_classic_write_setup_view(nfc);
             consumed = true;
         } else if(event.event == NfcWorkerEventCardDetected) {
             scene_manager_set_scene_state(
